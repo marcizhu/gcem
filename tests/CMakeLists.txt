@@ -66,7 +66,7 @@ foreach( file_ ${GCEM_TESTS} )
 
     add_executable( ${testname} EXCLUDE_FROM_ALL ${filename} )
     target_link_libraries( ${testname} gcem )
-    
+
     list(APPEND GCEM_TESTS_EX ${testname})
 endforeach()
 

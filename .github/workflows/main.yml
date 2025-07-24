@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: 
+        config:
         - {
             name: "ubuntu_latest_gcc_cxx11",
             os: ubuntu-latest,
@@ -62,30 +62,6 @@ jobs:
             cc: "gcc-11",
             cxx: "g++-11",
             cxxstd: "20"
-          }
-        - {
-            name: "ubuntu_latest_clang11_cxx11",
-            os: ubuntu-latest,
-            build_type: "Release",
-            cc: "clang-11",
-            cxx: "clang++-11",
-            cxxstd: "11"
-          }
-        - {
-            name: "ubuntu_latest_clang11_cxx14",
-            os: ubuntu-latest,
-            build_type: "Release",
-            cc: "clang-11",
-            cxx: "clang++-11",
-            cxxstd: "14"
-          }
-        - {
-            name: "ubuntu_latest_clang12_cxx14",
-            os: ubuntu-latest,
-            build_type: "Release",
-            cc: "clang-12",
-            cxx: "clang++-12",
-            cxxstd: "14"
           }
         - {
             name: "ubuntu22_clang13_cxx17",
@@ -145,14 +121,14 @@ jobs:
         shell: bash
         working-directory: tests
         run: |
-          export SHOULD_RUN_COVERAGE="y"
-          ./cov_check
-          cd ..
-          curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
-          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
-          gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
-          shasum -a 256 -c codecov.SHA256SUM
-          chmod +x codecov
-          ./codecov
+          sudo apt-get install lcov
+          lcov --directory . --capture --output-file coverage.info
+
+      - name: Upload to Codecov
+        if: startsWith(matrix.config.build_type, 'Coverage')
+        uses: codecov/codecov-action@v5
+        with:
+          fail_ci_if_error: true
+          name: gcem
+          files: ${{ runner.workspace }}/tests/coverage.info
+          verbose: true
