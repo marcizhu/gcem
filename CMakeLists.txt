@@ -18,7 +18,7 @@
 ##
 ################################################################################
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.31)
 project(gcem)
 
 set(GCEM_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
@@ -43,7 +43,7 @@ message(STATUS "GCE-Math version ${${PROJECT_NAME}_VERSION}")
 if(NOT MSVC)
     include(CheckCXXCompilerFlag)
     CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-    
+
     if(COMPILER_SUPPORTS_CXX11)
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has C++11 support.")
     else()
